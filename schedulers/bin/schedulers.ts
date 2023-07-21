@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
-import * as cdk from 'aws-cdk-lib';
-import { FlightsStacksStack } from '../lib/flights-stacks-stack';
+import * as cdk from "@aws-cdk/core";
+import { SchedulersStack } from '../lib/schedulers-stack';
 
 const app = new cdk.App();
-new FlightsStacksStack(app, 'FlightsStacksStack', {
+new SchedulersStack(app, 'SchedulersStack', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
@@ -18,4 +18,18 @@ new FlightsStacksStack(app, 'FlightsStacksStack', {
   // env: { account: '123456789012', region: 'us-east-1' },
 
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
+  srcDestKvp: [
+    {
+      source: "NRT",
+      destination: "BKK"
+    },
+    {
+      source: "NRT",
+      destination: "ICN"
+    },
+    {
+      source: "NRT",
+      destination: "TPE"
+    }
+  ]
 });

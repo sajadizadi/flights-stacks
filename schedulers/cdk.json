@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/flights-stacks.ts",
+  "app": "npx ts-node --prefer-ts-exts bin/schedulers.ts",
   "watch": {
     "include": [
       "**"

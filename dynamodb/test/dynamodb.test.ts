@@ -1,13 +1,13 @@
 // import * as cdk from 'aws-cdk-lib';
 // import { Template } from 'aws-cdk-lib/assertions';
-// import * as FlightsStacks from '../lib/flights-stacks-stack';
+// import * as Dynamodb from '../lib/dynamodb-stack';
 
 // example test. To run these tests, uncomment this file along with the
-// example resource in lib/flights-stacks-stack.ts
+// example resource in lib/dynamodb-stack.ts
 test('SQS Queue Created', () => {
 //   const app = new cdk.App();
 //     // WHEN
-//   const stack = new FlightsStacks.FlightsStacksStack(app, 'MyTestStack');
+//   const stack = new Dynamodb.DynamodbStack(app, 'MyTestStack');
 //     // THEN
 //   const template = Template.fromStack(stack);
 

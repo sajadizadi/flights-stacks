@@ -1,8 +1,8 @@
 {
-  "name": "flights-stacks",
+  "name": "dynamodb",
   "version": "0.1.0",
   "bin": {
-    "flights-stacks": "bin/flights-stacks.js"
+    "dynamodb": "bin/dynamodb.js"
   },
   "scripts": {
     "build": "tsc",
