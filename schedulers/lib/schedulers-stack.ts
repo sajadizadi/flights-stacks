@@ -8,12 +8,13 @@ import { Tags } from "@aws-cdk/core";
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 interface SchedulersStackProps extends cdk.StackProps {
-  readonly srcDestKvp: SrcDestKvp[];
+  readonly srcDestKvp: Flight[];
 }
 
-type SrcDestKvp = {
+type Flight = {
   source: string;
   destination: string;
+  schedule: events.Schedule;
 }
 
 export class SchedulersStack extends cdk.Stack {
@@ -28,28 +29,29 @@ export class SchedulersStack extends cdk.Stack {
     const repo = ecr.Repository.fromRepositoryName(this, "repo-id", "flights-finder");
     const role = iam.Role.fromRoleArn(this, "my-role", "arn:aws:iam::320169174892:role/service-role/lambda-role");
 
-    props?.srcDestKvp.forEach(srcDest => {
-      const f = new lambda.Function(this, `flights-finder-${srcDest.source}-${srcDest.destination}`, {
+    props?.srcDestKvp.forEach(flight => {
+      const f = new lambda.Function(this, `flights-finder-${flight.source}-${flight.destination}`, {
         code: lambda.EcrImageCode.fromEcrImage(repo, { tagOrDigest: "latest" }),
         runtime: lambda.Runtime.FROM_IMAGE,
         handler: lambda.Handler.FROM_IMAGE,
-        functionName: `flights-finder-${srcDest.source}-${srcDest.destination}`,
+        functionName: `flights-finder-${flight.source}-${flight.destination}`,
         role,
         memorySize: 3000,
         timeout: cdk.Duration.minutes(5),
         environment: {
-          "SOURCE": srcDest.source,
-          "DESTINATION": srcDest.destination,
-          //"LOOK_AHEAD_DAYS": "180"
+          "SOURCE": flight.source,
+          "DESTINATION": flight.destination,
+          "LOOK_AHEAD_DAYS": "180",
+          "QUERY_SLICE_SIZE": "100"
         },
 
       });
       Tags.of(scope).add("Purpose", "Flights-Scanner");
-      Tags.of(scope).add("Source", srcDest.source);
-      Tags.of(scope).add("Destination", srcDest.destination);
+      Tags.of(scope).add("Source", flight.source);
+      Tags.of(scope).add("Destination", flight.destination);
 
-      const eventRule = new events.Rule(this, `scheduled-task-${srcDest.source}-${srcDest.destination}`, {
-        schedule: events.Schedule.cron({ minute: "0/5" }),
+      const eventRule = new events.Rule(this, `scheduled-task-${flight.source}-${flight.destination}`, {
+        schedule: flight.schedule,
         targets: [new targets.LambdaFunction(f, {
           event: events.RuleTargetInput.fromObject({ /*message: "Hello Lambda"*/ })
         })]

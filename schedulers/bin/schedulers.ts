@@ -2,6 +2,8 @@
 import 'source-map-support/register';
 import * as cdk from "@aws-cdk/core";
 import { SchedulersStack } from '../lib/schedulers-stack';
+import * as events from "@aws-cdk/aws-events";
+
 
 const app = new cdk.App();
 new SchedulersStack(app, 'SchedulersStack', {
@@ -21,15 +23,43 @@ new SchedulersStack(app, 'SchedulersStack', {
   srcDestKvp: [
     {
       source: "NRT",
-      destination: "BKK"
+      destination: "BKK",
+      schedule: events.Schedule.cron({
+        // hour: "11", //7 am
+        // hour: "13", //9 am
+        hour: "19", //3 pm
+        // hour: "1", //9 pm
+        
+        //minute: "0"
+        minute: "32"
+      })
+    }
+    ,
+    {
+      source: "NRT",
+      destination: "ICN",
+      schedule: events.Schedule.cron({
+        // hour: "11", //7 am
+        //hour: "13", //9 am
+        hour: "19", //3 pm
+        // hour: "1", //9 pm
+        
+        // minute: "15"
+        minute: "37"
+      })
     },
     {
       source: "NRT",
-      destination: "ICN"
-    },
-    {
-      source: "NRT",
-      destination: "TPE"
+      destination: "TPE",
+      schedule: events.Schedule.cron({
+        // hour: "11", //7 am
+        //hour: "13", //9 am
+        hour: "19", //3 pm
+        // hour: "1", //9 pm
+        
+        //minute: "30"
+        minute: "42"
+      })
     }
   ]
 });
