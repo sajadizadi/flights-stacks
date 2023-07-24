@@ -31,19 +31,19 @@ export class SchedulersStack extends cdk.Stack {
 
     props?.srcDestKvp.forEach(flight => {
       const f = new lambda.Function(this, `flights-finder-${flight.source}-${flight.destination}`, {
-        code: lambda.EcrImageCode.fromEcrImage(repo, { tagOrDigest: "20230722-1528" }),
+        code: lambda.EcrImageCode.fromEcrImage(repo, { tagOrDigest: "20230724-1414" }),
         runtime: lambda.Runtime.FROM_IMAGE,
         handler: lambda.Handler.FROM_IMAGE,
         functionName: `flights-finder-${flight.source}-${flight.destination}`,
         role,
-        memorySize: 3000,
+        memorySize: 15000,
         timeout: cdk.Duration.minutes(5),
         environment: {
           "SOURCE": flight.source,
           "DESTINATION": flight.destination,
           "LOOK_AHEAD_DAYS": "180",
           "DUMMY": "1",
-          "QUERY_SLICE_SIZE": "150"
+          "QUERY_SLICE_SIZE": "20"
         },
 
       });
