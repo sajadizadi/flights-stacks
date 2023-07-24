@@ -36,14 +36,14 @@ export class SchedulersStack extends cdk.Stack {
         handler: lambda.Handler.FROM_IMAGE,
         functionName: `flights-finder-${flight.source}-${flight.destination}`,
         role,
-        memorySize: 15000,
-        timeout: cdk.Duration.minutes(5),
+        memorySize: 3000,
+        timeout: cdk.Duration.minutes(15),
         environment: {
           "SOURCE": flight.source,
           "DESTINATION": flight.destination,
           "LOOK_AHEAD_DAYS": "180",
           "DUMMY": "1",
-          "QUERY_SLICE_SIZE": "20"
+          "QUERY_SLICE_SIZE": "25"
         },
 
       });
