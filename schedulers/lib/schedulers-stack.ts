@@ -31,7 +31,7 @@ export class SchedulersStack extends cdk.Stack {
 
     props?.srcDestKvp.forEach(flight => {
       const f = new lambda.Function(this, `flights-finder-${flight.source}-${flight.destination}`, {
-        code: lambda.EcrImageCode.fromEcrImage(repo, { tagOrDigest: "20230724-1414" }),
+        code: lambda.EcrImageCode.fromEcrImage(repo, { tagOrDigest: "20230724-2205" }),
         runtime: lambda.Runtime.FROM_IMAGE,
         handler: lambda.Handler.FROM_IMAGE,
         functionName: `flights-finder-${flight.source}-${flight.destination}`,
@@ -43,7 +43,9 @@ export class SchedulersStack extends cdk.Stack {
           "DESTINATION": flight.destination,
           "LOOK_AHEAD_DAYS": "180",
           "DUMMY": "1",
-          "QUERY_SLICE_SIZE": "25"
+          "QUERY_SLICE_SIZE": "15" 
+          //query slice of 25 takes 387 seconds (6.45 minutes)
+          //query slice of 15 takes ? seconds?
         },
 
       });
